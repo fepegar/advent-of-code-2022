@@ -19,12 +19,12 @@ def get_totals(data):
     return totals
 
 
-def part_1(data):
+def part_1(data: str) -> int:
     totals = get_totals(data)
     return max(totals)
 
 
-def part_2(data):
+def part_2(data: str) -> int:
     totals = get_totals(data)
     top = totals[-3:]
     return sum(top)

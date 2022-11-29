@@ -6,7 +6,7 @@ from pathlib import Path
 format = '%(asctime)s - %(filename)s:%(lineno)d - %(levelname)s - %(message)s'
 
 
-def get_logger(name):
+def get_logger(name: str) -> logging.Logger:
     logger = logging.getLogger(name)
     formatter = logging.Formatter(format)
     handler = logging.StreamHandler()
@@ -16,6 +16,6 @@ def get_logger(name):
     return logger
 
 
-def read_input(caller_path, relative_filepath):
+def read_input(caller_path: str, relative_filepath: str) -> str:
     path = Path(caller_path).parent / relative_filepath
     return path.read_text()
