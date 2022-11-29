@@ -1,20 +1,10 @@
-from pathlib import Path
+from aoc import get_logger, read_input
 
 
-this_dir = Path(__file__).parent
-verbose = True
-
-def p(*args):
-    if verbose:
-        print(*args)
+logger = get_logger(__name__)
 
 
-def read_input(relative_filepath):
-    filepath = this_dir / relative_filepath
-    return filepath.read_text()
-
-
-def part_1(data):
+def get_totals(data):
     elves = []
     all_calories = []
     for line in data.splitlines():
@@ -25,38 +15,39 @@ def part_1(data):
             all_calories.append(int(line))
     elves.append(all_calories)
     totals = [sum(all_calories) for all_calories in elves]
+    logger.debug(totals)
+    return totals
+
+
+def part_1(data):
+    totals = get_totals(data)
     return max(totals)
 
 
 def part_2(data):
-    elves = []
-    all_calories = []
-    for line in data.splitlines():
-        if not line:
-            elves.append(all_calories)
-            all_calories = []
-        else:
-            all_calories.append(int(line))
-    elves.append(all_calories)
-    print(elves)
-    totals = sorted(sum(all_calories) for all_calories in elves)
-    print(totals)
+    totals = get_totals(data)
     top = totals[-3:]
-    print(top)
     return sum(top)
 
 
 if __name__ == "__main__":
-    example = read_input('example.txt')
-    data = read_input('input.txt')
-    p('Part 1')
+    example = read_input(__file__, 'example.txt')
+    data = read_input(__file__, 'input.txt')
+
+    logger.info('PART 1')
+
     example_1 = part_1(example)
-    p('Example 1:', example_1)
+    logger.info('Example 1: %s', example_1)
+
     answer_1 = part_1(data)
-    p('Answer 1:', answer_1)
-    p()
-    p('Part 2')
+    logger.info('Answer 1:  %s', answer_1)
+
+    logger.info('############################')
+
+    logger.info('PART 2')
+
     example_2 = part_2(example)
-    p('Example 2:', example_2)
+    logger.info('Example 2: %s', example_2)
+
     answer_2 = part_2(data)
-    p('Answer 2:', answer_2)
+    logger.info('Answer 2:  %s', answer_2)
