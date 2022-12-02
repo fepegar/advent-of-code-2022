@@ -1,7 +1,7 @@
-from aoc import day_02
-from aoc.day_02 import part_1
-from aoc.day_02 import part_2
-from aoc.day_02 import read_input
+from aoc22 import day_02
+from aoc22.day_02 import part_1
+from aoc22.day_02 import part_2
+from aoc22.day_02 import read_input
 
 
 def test_day_02():
