@@ -1,108 +1,141 @@
-from .. import get_logger
-from .. import read_input
+import enum
+
+from tqdm.auto import tqdm
+
+from aoc22 import get_logger
+from aoc22 import read_input
 
 
 logger = get_logger(__name__)
 
 
-dict_opponent = {
-    'A': 'ROCK',
-    'B': 'PAPER',
-    'C': 'SCISSORS',
-}
-
-dict_you = {
-    'X': 'ROCK',
-    'Y': 'PAPER',
-    'Z': 'SCISSORS',
-}
-
-shapes_scores = {
-    'ROCK': 1,
-    'PAPER': 2,
-    'SCISSORS': 3,
-}
+@enum.unique
+class Outcome(str, enum.Enum):
+    WIN = 'WIN'
+    DRAW = 'DRAW'
+    LOSE = 'LOSE'
 
 
-DRAW = 3
-WIN = 6
-LOSE = 0
+class Code(str, enum.Enum):
+    LOSE = 'X'
+    DRAW = 'Y'
+    WIN = 'Z'
+    ROCK = 'X'
+    PAPER = 'Y'
+    SCISSORS = 'Z'
 
 
-def play_game(game: str):
-    opponent, you = game.split()
-    score = shapes_scores[dict_you[you]]
-    match dict_opponent[opponent]:
-        case 'ROCK':
-            match dict_you[you]:
-                case 'ROCK':
-                    score += DRAW
-                case 'PAPER':
-                    score += WIN
-                case 'SCISSORS':
-                    score += LOSE
-        case 'PAPER':
-            match dict_you[you]:
-                case 'ROCK':
-                    score += LOSE
-                case 'PAPER':
-                    score += DRAW
-                case 'SCISSORS':
-                    score += WIN
-        case 'SCISSORS':
-            match dict_you[you]:
-                case 'ROCK':
-                    score += WIN
-                case 'PAPER':
-                    score += LOSE
-                case 'SCISSORS':
-                    score += DRAW
+class Shape:
+    ROCK = 'ROCK'
+    PAPER = 'PAPER'
+    SCISSORS = 'SCISSORS'
+
+    outcome_scores = {
+        Outcome.WIN: 6,
+        Outcome.DRAW: 3,
+        Outcome.LOSE: 0,
+    }
+
+    def fight(self, other):
+        match other:
+            case self.weaker_class():
+                return self.outcome_scores[Outcome.WIN]
+            case self.stronger_class():
+                return self.outcome_scores[Outcome.LOSE]
+            case self.__class__():
+                return self.outcome_scores[Outcome.DRAW]
+
+    @classmethod
+    def from_their_code(cls, code: str) -> 'Shape':
+        match code:
+            case 'A':
+                return Rock()
+            case 'B':
+                return Paper()
+            case 'C':
+                return Scissors()
+
+    @classmethod
+    def from_my_code(cls, code: str) -> 'Shape':
+        match code:
+            case Code.ROCK:
+                return Rock()
+            case Code.PAPER:
+                return Paper()
+            case Code.SCISSORS:
+                return Scissors()
+
+    @classmethod
+    def from_their_shape_and_my_code(
+        cls,
+        their_shape: 'Shape',
+        my_code: str,
+    ) -> 'Shape':
+        match my_code:
+            case Code.LOSE:
+                return their_shape.weaker_class()
+            case Code.DRAW:
+                return their_shape
+            case Code.WIN:
+                return their_shape.stronger_class()
+
+
+class Rock(Shape):
+    def __init__(self):
+        self.weaker_class = Scissors
+        self.stronger_class = Paper
+        self.score = 1
+
+
+class Paper(Shape):
+    def __init__(self):
+        self.weaker_class = Rock
+        self.stronger_class = Scissors
+        self.score = 2
+
+
+class Scissors(Shape):
+    def __init__(self):
+        self.weaker_class = Paper
+        self.stronger_class = Rock
+        self.score = 3
+
+
+def get_shapes_guess(their_code: str, my_code: str) -> tuple[Shape, Shape]:
+    their_shape = Shape.from_their_code(their_code)
+    my_shape = Shape.from_my_code(my_code)
+    return their_shape, my_shape
+
+
+def get_shapes_real(their_code: str, my_code: str) -> tuple[Shape, Shape]:
+    their_shape = Shape.from_their_code(their_code)
+    my_shape = Shape.from_their_shape_and_my_code(their_shape, my_code)
+    return their_shape, my_shape
+
+
+def play_game_guess(game: str) -> int:
+    their_code, my_code = game.split()
+    their_shape, my_shape = get_shapes_guess(their_code, my_code)
+    score = my_shape.score + my_shape.fight(their_shape)
     return score
 
 
-def play_game_2(game):
-    opponent, you = game.split()
-    match dict_opponent[opponent]:
-        case 'ROCK':
-            match you:
-                case 'X':
-                    score = LOSE + shapes_scores['SCISSORS']
-                case 'Y':
-                    score = DRAW + shapes_scores['ROCK']
-                case 'Z':
-                    score = WIN + shapes_scores['PAPER']
-        case 'PAPER':
-            match you:
-                case 'X':
-                    score = LOSE + shapes_scores['ROCK']
-                case 'Y':
-                    score = DRAW + shapes_scores['PAPER']
-                case 'Z':
-                    score = WIN + shapes_scores['SCISSORS']
-        case 'SCISSORS':
-            match you:
-                case 'X':
-                    score = LOSE + shapes_scores['PAPER']
-                case 'Y':
-                    score = DRAW + shapes_scores['SCISSORS']
-                case 'Z':
-                    score = WIN + shapes_scores['ROCK']
+def play_game_real(game: str) -> int:
+    their_code, my_code = game.split()
+    their_shape, my_shape = get_shapes_real(their_code, my_code)
+    score = my_shape.score + my_shape.fight(their_shape)
     return score
 
 
-def part_1(data: str):
+def part_1(data: str) -> int:
     games = data.splitlines()
-    score = 0
-    for game in games:
-        score += play_game(game)
+    score = sum(play_game_guess(game) for game in tqdm(games))
     return score
 
 
-def part_2(data: str):
+def part_2(data: str) -> int:
     games = data.splitlines()
-    score = 0
-    for game in games:
-        score += play_game_2(game)
+    score = sum(play_game_real(game) for game in tqdm(games))
     return score
 
 
