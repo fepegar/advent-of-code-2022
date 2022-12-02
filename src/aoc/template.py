@@ -1,5 +1,5 @@
-from aoc import get_logger
-from aoc import read_input
+from .. import get_logger
+from .. import read_input
 
 
 logger = get_logger(__name__)
