@@ -25,8 +25,12 @@ logger = get_logger(__name__)
 
 
 def read_input(caller_path: str | Path, relative_filepath: str) -> str:
-    path = Path(caller_path).parent / relative_filepath
-    text = path.read_text()
+    if (path := Path(caller_path)).is_dir():
+        directory = path
+    else:
+        directory = path.parent
+    data_path = directory / relative_filepath
+    text = data_path.read_text()
     if not text:
         logger.warning('No input found in %s', path)
     return text
