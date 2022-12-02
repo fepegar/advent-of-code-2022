@@ -16,6 +16,12 @@ def get_logger(name: str) -> logging.Logger:
     return logger
 
 
-def read_input(caller_path: str, relative_filepath: str) -> str:
+logger = get_logger(__name__)
+
+
+def read_input(caller_path: str | Path, relative_filepath: str) -> str:
     path = Path(caller_path).parent / relative_filepath
-    return path.read_text()
+    text = path.read_text()
+    if not text:
+        logger.warning('No input found in %s', path)
+    return text
