@@ -15,7 +15,7 @@ def part_2(data: str):
     return result
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     example = read_input(__file__, 'example.txt')
     data = read_input(__file__, 'input.txt')
 

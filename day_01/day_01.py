@@ -30,7 +30,7 @@ def part_2(data: str) -> int:
     return sum(top)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     example = read_input(__file__, 'example.txt')
     data = read_input(__file__, 'input.txt')
 

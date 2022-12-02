@@ -1,14 +1,19 @@
-
 import logging
 from pathlib import Path
 
 
-format = '%(asctime)s - %(filename)s:%(lineno)d - %(levelname)s - %(message)s'
+logger_format = (
+    '%(asctime)s'
+    ' - %(filename)s'
+    ':%(lineno)d'
+    ' - %(levelname)s'
+    ' - %(message)s'
+)
 
 
 def get_logger(name: str) -> logging.Logger:
     logger = logging.getLogger(name)
-    formatter = logging.Formatter(format)
+    formatter = logging.Formatter(logger_format)
     handler = logging.StreamHandler()
     handler.setFormatter(formatter)
     logger.addHandler(handler)
