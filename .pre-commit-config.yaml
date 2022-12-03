@@ -75,8 +75,8 @@ repos:
 
   - repo: local
     hooks:
-      - id: pylint
-        name: pylint
+      - id: pylint-check
+        name: pylint-check
         entry: pylint
         language: system
         types: [python]
@@ -89,3 +89,12 @@ repos:
             "--disable=missing-module-docstring",
             "--max-line-length=88",
           ]
+
+  - repo: local
+    hooks:
+      - id: pytest-check
+        name: pytest-check
+        entry: pytest
+        language: system
+        pass_filenames: false
+        always_run: true
