@@ -1,10 +1,10 @@
+from __future__ import annotations
+
 import abc
 import enum
 
-from tqdm.auto import tqdm
-
 from aoc22 import get_logger
-from aoc22 import read_input
+from aoc22 import main
 
 
 logger = get_logger(__name__)
@@ -31,8 +31,8 @@ class Shape(abc.ABC):
     PAPER = 'PAPER'
     SCISSORS = 'SCISSORS'
 
-    weaker_class: type['Shape']
-    stronger_class: type['Shape']
+    weaker_class: type[Shape]
+    stronger_class: type[Shape]
     score: int
 
     outcome_scores = {
@@ -52,7 +52,7 @@ class Shape(abc.ABC):
         return score
 
     @classmethod
-    def from_their_code(cls, code: str) -> 'Shape':
+    def from_their_code(cls, code: str) -> Shape:
         shape: Shape
         match code:
             case 'A':
@@ -64,7 +64,7 @@ class Shape(abc.ABC):
         return shape
 
     @classmethod
-    def from_my_code(cls, code: str) -> 'Shape':
+    def from_my_code(cls, code: str) -> Shape:
         shape: Shape
         match code:
             case Code.ROCK:
@@ -76,11 +76,7 @@ class Shape(abc.ABC):
         return shape
 
     @classmethod
-    def from_their_shape_and_my_code(
-        cls,
-        their_shape: 'Shape',
-        my_code: str,
-    ) -> 'Shape':
+    def from_their_shape_and_my_code(cls, their_shape: Shape, my_code: str) -> Shape:
         shape: Shape
         match my_code:
             case Code.LOSE:
@@ -141,34 +137,15 @@ def play_game_real(game: str) -> int:
 
 def part_1(data: str) -> int:
     games = data.splitlines()
-    score = sum(play_game_guess(game) for game in tqdm(games))
+    score = sum(play_game_guess(game) for game in games)
     return score
 
 
 def part_2(data: str) -> int:
     games = data.splitlines()
-    score = sum(play_game_real(game) for game in tqdm(games))
+    score = sum(play_game_real(game) for game in games)
     return score
 
 
 if __name__ == '__main__':
-    example = read_input(__file__, 'example.txt')
-    data = read_input(__file__, 'input.txt')
-
-    logger.info('PART 1')
-
-    example_1 = part_1(example)
-    logger.info('Example 1: %s', example_1)
-
-    answer_1 = part_1(data)
-    logger.info('Answer 1:  %s', answer_1)
-
-    logger.info('############################')
-
-    logger.info('PART 2')
-
-    example_2 = part_2(example)
-    logger.info('Example 2: %s', example_2)
-
-    answer_2 = part_2(data)
-    logger.info('Answer 2:  %s', answer_2)
+    main(__file__, part_1, part_2, logger)

@@ -72,3 +72,20 @@ repos:
     rev: v0.991
     hooks:
     - id: mypy
+
+  - repo: local
+    hooks:
+      - id: pylint
+        name: pylint
+        entry: pylint
+        language: system
+        types: [python]
+        args:
+          [
+            "-rn", # Only display messages
+            "-sn", # Don't display the score
+            "--disable=missing-class-docstring",
+            "--disable=missing-function-docstring",
+            "--disable=missing-module-docstring",
+            "--max-line-length=88",
+          ]
