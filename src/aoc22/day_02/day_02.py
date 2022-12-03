@@ -1,3 +1,4 @@
+import abc
 import enum
 
 from tqdm.auto import tqdm
@@ -25,10 +26,14 @@ class Code(str, enum.Enum):
     SCISSORS = 'Z'
 
 
-class Shape:
+class Shape(abc.ABC):
     ROCK = 'ROCK'
     PAPER = 'PAPER'
     SCISSORS = 'SCISSORS'
+
+    weaker_class: type['Shape']
+    stronger_class: type['Shape']
+    score: int
 
     outcome_scores = {
         Outcome.WIN: 6,
@@ -39,31 +44,36 @@ class Shape:
     def fight(self, other):
         match other:
             case self.weaker_class():
-                return self.outcome_scores[Outcome.WIN]
+                score = self.outcome_scores[Outcome.WIN]
             case self.stronger_class():
-                return self.outcome_scores[Outcome.LOSE]
+                score = self.outcome_scores[Outcome.LOSE]
             case self.__class__():
-                return self.outcome_scores[Outcome.DRAW]
+                score = self.outcome_scores[Outcome.DRAW]
+        return score
 
     @classmethod
     def from_their_code(cls, code: str) -> 'Shape':
+        shape: Shape
         match code:
             case 'A':
-                return Rock()
+                shape = Rock()
             case 'B':
-                return Paper()
+                shape = Paper()
             case 'C':
-                return Scissors()
+                shape = Scissors()
+        return shape
 
     @classmethod
     def from_my_code(cls, code: str) -> 'Shape':
+        shape: Shape
         match code:
             case Code.ROCK:
-                return Rock()
+                shape = Rock()
             case Code.PAPER:
-                return Paper()
+                shape = Paper()
             case Code.SCISSORS:
-                return Scissors()
+                shape = Scissors()
+        return shape
 
     @classmethod
     def from_their_shape_and_my_code(
@@ -71,13 +81,15 @@ class Shape:
         their_shape: 'Shape',
         my_code: str,
     ) -> 'Shape':
+        shape: Shape
         match my_code:
             case Code.LOSE:
-                return their_shape.weaker_class()
+                shape = their_shape.weaker_class()
             case Code.DRAW:
-                return their_shape
+                shape = their_shape
             case Code.WIN:
-                return their_shape.stronger_class()
+                shape = their_shape.stronger_class()
+        return shape
 
 
 class Rock(Shape):
