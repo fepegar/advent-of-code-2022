@@ -1,18 +1,20 @@
 import importlib
+from pathlib import Path
 
 import pytest
+import yaml
 
 from aoc22 import read_input
 
 
+with open(Path(__file__).parent / 'fixtures.yml', encoding='utf-8') as f:
+    modules_and_fixtures = yaml.load(f, Loader=yaml.FullLoader)
+modules_and_fixtures = [tuple(fixtures) for fixtures in modules_and_fixtures]
+
+
 @pytest.mark.parametrize(
     'day_module_name,example_1,part_1,example_2,part_2',
-    [
-        ('day_01', 24000, 72602, 45000, 160912),
-        ('day_02', 15, 13682, 12, 12881),
-        ('day_03', 157, 7845, 70, 2790),
-        ('day_04', 2, 540, 4, 872),
-    ],
+    modules_and_fixtures,
 )
 def test_day(
     day_module_name: str,
