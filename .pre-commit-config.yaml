@@ -76,28 +76,28 @@ repos:
     - id: mypy
       additional_dependencies: [types-all]
 
-  - repo: local
-    hooks:
-      - id: pylint-check
-        name: pylint-check
-        entry: pylint
-        language: system
-        types: [python]
-        args:
-          [
-            "-rn", # Only display messages
-            "-sn", # Don't display the score
-            "--disable=missing-class-docstring",
-            "--disable=missing-function-docstring",
-            "--disable=missing-module-docstring",
-            "--max-line-length=88",
-          ]
+  # - repo: local
+  #   hooks:
+  #     - id: pylint-check
+  #       name: pylint-check
+  #       entry: pylint
+  #       language: system
+  #       types: [python]
+  #       args:
+  #         [
+  #           "-rn", # Only display messages
+  #           "-sn", # Don't display the score
+  #           "--disable=missing-class-docstring",
+  #           "--disable=missing-function-docstring",
+  #           "--disable=missing-module-docstring",
+  #           "--max-line-length=88",
+  #         ]
 
-  - repo: local
-    hooks:
-      - id: pytest-check
-        name: pytest-check
-        entry: pytest
-        language: system
-        pass_filenames: false
-        always_run: true
+  # - repo: local
+  #   hooks:
+  #     - id: pytest-check
+  #       name: pytest-check
+  #       entry: pytest
+  #       language: system
+  #       pass_filenames: false
+  #       always_run: true
