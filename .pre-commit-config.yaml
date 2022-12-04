@@ -16,6 +16,7 @@ repos:
       - id: mixed-line-ending          # Replaces or checks mixed line ending
       - id: name-tests-test            # Check that test functions are named correctly
         exclude: setup.cfg
+        args: [--pytest-test-first]
 
   - repo: https://github.com/pycqa/flake8
     rev: 6.0.0
