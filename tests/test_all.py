@@ -25,6 +25,7 @@ def test_day(
 ):
     day_module = importlib.import_module(f'aoc22.{day_module_name}')
     day_path = day_module.__file__
+    assert isinstance(day_path, str)
     example = read_input(day_path, 'example.txt')
     data = read_input(day_path, 'input.txt')
     assert day_module.part_1(example) == example_1
