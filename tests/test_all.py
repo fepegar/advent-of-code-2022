@@ -4,8 +4,11 @@ from pathlib import Path
 import pytest
 import yaml
 
-from aoc22 import read_input
+from aoc22 import main
+from aoc22 import get_logger
 
+
+_logger = get_logger(__name__)
 
 with open(Path(__file__).parent / 'fixtures.yml', encoding='utf-8') as f:
     modules_and_fixtures = yaml.load(f, Loader=yaml.FullLoader)
@@ -26,9 +29,13 @@ def test_day(
     day_module = importlib.import_module(f'aoc22.{day_module_name}')
     day_path = day_module.__file__
     assert isinstance(day_path, str)
-    example = read_input(day_path, 'example.txt')
-    data = read_input(day_path, 'input.txt')
-    assert day_module.part_1(example) == example_1
-    assert day_module.part_1(data) == part_1
-    assert day_module.part_2(example) == example_2
-    assert day_module.part_2(data) == part_2
+    answer_example_1, answer_1, answer_example_2, answer_2 = main(
+        day_path,
+        day_module.part_1,
+        day_module.part_2,
+        _logger,
+    )
+    assert answer_example_1 == example_1
+    assert answer_1 == part_1
+    assert answer_example_2 == example_2
+    assert answer_2 == part_2
