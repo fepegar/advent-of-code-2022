@@ -17,5 +17,7 @@ jobs:
         run: pip install ".[dev]"
 
       - name: Run tests
-        run: |
-          tox -e py311-pytest
+        run: tox -e py311-pytest
+
+      - name: Upload Codecov
+        uses: codecov/codecov-action@v3.1.1
