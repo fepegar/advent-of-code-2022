@@ -1,0 +1,2 @@
+include src/**/example.txt
+include src/**/input.txt
