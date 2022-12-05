@@ -10,14 +10,17 @@ from aoc22 import get_logger
 
 _logger = get_logger(__name__)
 
-with open(Path(__file__).parent / 'fixtures.yml', encoding='utf-8') as f:
-    modules_and_fixtures = yaml.load(f, Loader=yaml.FullLoader)
-modules_and_fixtures = [tuple(fixtures) for fixtures in modules_and_fixtures]
+
+def get_modules_and_fixtures():
+    with open(Path(__file__).parent / 'fixtures.yml', encoding='utf-8') as f:
+        modules_and_fixtures = yaml.load(f, Loader=yaml.FullLoader)
+    modules_and_fixtures = [tuple(fixtures) for fixtures in modules_and_fixtures]
+    return modules_and_fixtures
 
 
 @pytest.mark.parametrize(
     'day_module_name,example_1,part_1,example_2,part_2',
-    modules_and_fixtures,
+    get_modules_and_fixtures(),
 )
 def test_day(
     day_module_name: str,
