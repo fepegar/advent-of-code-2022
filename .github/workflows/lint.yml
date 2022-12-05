@@ -1,0 +1,54 @@
+name: Linting
+on: [push]
+jobs:
+
+  mypy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install package
+        run: pip install . tox
+
+      - name: Run mypy
+        run: tox -e py311-mypy
+
+  pylint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install package
+        run: pip install . tox
+
+      - name: Run pylint
+        run: tox -e py311-pylint
+
+  black:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install package
+        run: pip install . tox
+
+      - name: Run black
+        run: tox -e py311-black
