@@ -1,5 +1,4 @@
-name: Test
-run-name: ${{ github.actor }} is running the unit tests
+name: Unit tests and coverage
 on: [push]
 jobs:
   Run-Tests:
@@ -14,7 +13,7 @@ jobs:
           python-version: "3.11"
 
       - name: Install package
-        run: pip install ".[dev]"
+        run: pip install . tox
 
       - name: Run tests
         run: tox -e py311-pytest
