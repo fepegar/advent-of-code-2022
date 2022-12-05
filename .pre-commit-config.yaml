@@ -54,7 +54,7 @@ repos:
       - id: python-use-type-annotations       # enforce that type annotations are used instead of type comments
 
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.2.3
+    rev: v3.3.0
     hooks:
       - id: pyupgrade
         args: ['--py310-plus', '--keep-runtime-typing']
