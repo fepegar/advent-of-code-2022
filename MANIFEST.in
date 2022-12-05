@@ -1,2 +1,2 @@
-include src/**/example.txt
-include src/**/input.txt
+recursive-include src example.txt
+recursive-include src input.txt
