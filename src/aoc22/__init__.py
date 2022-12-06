@@ -4,6 +4,7 @@ from collections.abc import Callable
 
 
 LOGGER_FORMAT = '%(asctime)s - %(filename)s:%(lineno)d - %(levelname)s - %(message)s'
+TypeResult = int | str
 
 
 def get_logger(name: str) -> logging.Logger:
@@ -28,10 +29,10 @@ def read_input(caller_path: str | Path, relative_filepath: str) -> str:
 
 def main(
     file_path: str,
-    part_1: Callable,
-    part_2: Callable,
+    part_1: Callable[[str], TypeResult],
+    part_2: Callable[[str], TypeResult],
     logger: logging.Logger,
-) -> tuple[int, int, int, int]:
+) -> tuple[TypeResult, TypeResult, TypeResult, TypeResult]:
     example = read_input(file_path, 'example.txt')
     data = read_input(file_path, 'input.txt')
 

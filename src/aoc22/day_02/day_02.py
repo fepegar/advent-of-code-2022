@@ -41,7 +41,7 @@ class Shape(abc.ABC):
         Outcome.LOSE: 0,
     }
 
-    def fight(self, other):
+    def fight(self, other: Shape) -> int:
         match other:
             case self.weaker_class():
                 score = self.outcome_scores[Outcome.WIN]

@@ -15,7 +15,7 @@ def get_shared_item(line: str) -> str:
     return intersection.pop()
 
 
-def get_priority(char):
+def get_priority(char: str) -> int:
     return ascii_letters.index(char) + 1
 
 
