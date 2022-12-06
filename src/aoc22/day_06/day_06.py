@@ -14,9 +14,8 @@ def find_set(data: str, offset: int) -> int:
         start = list(signal)[:offset]
         if len(set(start[:offset])) == offset:
             break
-        else:
-            signal.rotate(-1)
-            i += 1
+        signal.rotate(-1)
+        i += 1
     return i
 
 
