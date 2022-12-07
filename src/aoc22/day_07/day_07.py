@@ -97,8 +97,9 @@ class Reader:
             case ['dir', name]:
                 self.add_folder(name)
             case [size_str, name]:
-                size = int(size_str)
-                self.add_file(name, size)
+                self.add_file(name, int(size_str))
+            case _:
+                raise ValueError(f'Unknown line: {line}')
 
     def make_tree(self) -> Folder:
         for line in self._lines[1:]:
