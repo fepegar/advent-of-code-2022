@@ -28,7 +28,7 @@ class File:
         return self._size
 
     def print_for_tree(self, indent: int) -> None:
-        print(' ' * indent, '-', self)
+        print(' ' * indent, '-', self)  # noqa: T201
 
 
 class Folder(File):
@@ -43,7 +43,7 @@ class Folder(File):
         sizes = {file.name: file.size for file in self.files.values()}
         return sum(sizes.values())
 
-    def fill_size(self, sizes: dict[str, int]):
+    def fill_size(self, sizes: dict[Path, int]):
         if self.name in sizes:
             raise ValueError(f'Folder {self.name} already in sizes')
         sizes[self.path] = self.size
@@ -51,11 +51,11 @@ class Folder(File):
             if isinstance(file, Folder):
                 file.fill_size(sizes)
 
-    def print(self, indent: int = 0):
+    def print_tree(self, indent: int = 0):
         self.print_for_tree(indent)
         for file in self.files.values():
             if isinstance(file, Folder):
-                file.print(indent + 2)
+                file.print_tree(indent + 2)
             else:
                 file.print_for_tree(indent + 2)
 
@@ -80,8 +80,9 @@ def make_tree(data: str) -> Folder:
                         current_folder = current_folder.parent
                         current_path = current_path.parent
                     else:
-                        current_folder = current_folder.files[target_folder_name]
-                        assert isinstance(current_folder, Folder)
+                        folder = current_folder.files[target_folder_name]
+                        assert isinstance(folder, Folder)
+                        current_folder = folder
                         current_path = current_path / target_folder_name
                 case 'ls':
                     pass
@@ -116,7 +117,7 @@ def part_2(data: str):
     used = root.size
     available = total - used
     candidates = []
-    for path, size in sizes.items():
+    for size in sizes.values():
         would_have = available + size
         if would_have >= need:
             candidates.append(size)
