@@ -20,3 +20,7 @@ disable = """
 exclude = [
   "template",
 ]
+
+[[tool.mypy.overrides]]
+module = "colorama"
+ignore_missing_imports = true
