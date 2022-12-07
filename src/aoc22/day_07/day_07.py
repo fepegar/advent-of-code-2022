@@ -67,7 +67,7 @@ class Reader:
         self._current_folder = Folder(self._current_path)
         self.root = self._current_folder
 
-    def cd(self, target_folder_name: str) -> None:  # noqa: A003
+    def change_dir(self, target_folder_name: str) -> None:
         if target_folder_name == '..':
             assert self._current_folder.parent is not None
             self._current_folder = self._current_folder.parent
@@ -91,7 +91,7 @@ class Reader:
     def process_line(self, line: str) -> None:
         match line.split():
             case ['$', 'cd', target_folder_name]:
-                self.cd(target_folder_name)
+                self.change_dir(target_folder_name)
             case ['$', 'ls']:
                 pass
             case ['dir', name]:
