@@ -20,11 +20,11 @@ class File:
         return f'{self.name} (file, size={self.size})'
 
     @property
-    def name(self):
+    def name(self) -> str:
         return self.path.name
 
     @property
-    def size(self):
+    def size(self) -> int:
         return self._size
 
     def print_for_tree(self, indent: int) -> None:
@@ -39,19 +39,19 @@ class Folder(File):
         return f'{self.name} (dir)'
 
     @property
-    def size(self):
+    def size(self) -> int:
         sizes = {file.name: file.size for file in self.files.values()}
         return sum(sizes.values())
 
-    def fill_size(self, sizes: dict[Path, int]):
-        if self.name in sizes:
+    def fill_size(self, sizes: dict[Path, int]) -> None:
+        if self.path in sizes:
             raise ValueError(f'Folder {self.name} already in sizes')
         sizes[self.path] = self.size
         for file in self.files.values():
             if isinstance(file, Folder):
                 file.fill_size(sizes)
 
-    def print_tree(self, indent: int = 0):
+    def print_tree(self, indent: int = 0) -> None:
         self.print_for_tree(indent)
         for file in self.files.values():
             if isinstance(file, Folder):

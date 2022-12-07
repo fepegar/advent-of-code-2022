@@ -6,16 +6,19 @@ import yaml
 
 from aoc22 import main
 from aoc22 import get_logger
+from aoc22 import TypeResult
 
 
 _logger = get_logger(__name__)
+TypeFixture = tuple[str, TypeResult, TypeResult, TypeResult, TypeResult]
 
 
-def get_modules_and_fixtures():
+def get_modules_and_fixtures() -> list[TypeFixture]:
+    modules_and_fixtures: list[list[TypeResult]]
     with open(Path(__file__).parent / 'fixtures.yml', encoding='utf-8') as f:
         modules_and_fixtures = yaml.load(f, Loader=yaml.FullLoader)
-    modules_and_fixtures = [tuple(fixtures) for fixtures in modules_and_fixtures]
-    return modules_and_fixtures
+    result = [tuple(fixtures) for fixtures in modules_and_fixtures]
+    return result  # type: ignore[return-value]
 
 
 @pytest.mark.parametrize(
@@ -28,7 +31,7 @@ def test_day(
     part_1: int,
     example_2: int,
     part_2: int,
-):
+) -> None:
     day_module = importlib.import_module(f'aoc22.{day_module_name}')
     day_path = day_module.__file__
     assert isinstance(day_path, str)

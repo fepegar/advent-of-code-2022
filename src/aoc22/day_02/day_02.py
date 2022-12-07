@@ -89,21 +89,21 @@ class Shape(abc.ABC):
 
 
 class Rock(Shape):
-    def __init__(self):
+    def __init__(self) -> None:
         self.weaker_class = Scissors
         self.stronger_class = Paper
         self.score = 1
 
 
 class Paper(Shape):
-    def __init__(self):
+    def __init__(self) -> None:
         self.weaker_class = Rock
         self.stronger_class = Scissors
         self.score = 2
 
 
 class Scissors(Shape):
-    def __init__(self):
+    def __init__(self) -> None:
         self.weaker_class = Paper
         self.stronger_class = Rock
         self.score = 3
