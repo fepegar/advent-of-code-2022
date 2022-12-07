@@ -60,58 +60,63 @@ class Folder(File):
                 file.print_for_tree(indent + 2)
 
 
-def make_tree(data: str) -> Folder:
-    # todo: match case to parse command
-    known_folders = {}
-    current_path = Path('/')
-    current_folder: Folder = Folder(current_path)
-    root = current_folder
-    known_folders[current_path] = current_folder
-    for line in data.splitlines()[1:]:
-        is_command = line.startswith('$')
-        if is_command:
-            split = line.split()
-            command = split[1]
-            match command:
-                case 'cd':
-                    target_folder_name = split[2]
-                    if target_folder_name == '..':
-                        assert current_folder.parent is not None
-                        current_folder = current_folder.parent
-                        current_path = current_path.parent
-                    else:
-                        folder = current_folder.files[target_folder_name]
-                        assert isinstance(folder, Folder)
-                        current_folder = folder
-                        current_path = current_path / target_folder_name
-                case 'ls':
-                    pass
+class Reader:
+    def __init__(self, data: str):
+        self._lines = data.splitlines()
+        self._current_path = Path('/')
+        self._current_folder = Folder(self._current_path)
+        self.root = self._current_folder
+
+    def cd(self, target_folder_name: str) -> None:  # noqa: A003
+        if target_folder_name == '..':
+            assert self._current_folder.parent is not None
+            self._current_folder = self._current_folder.parent
+            self._current_path = self._current_path.parent
         else:
-            str_a, str_b = line.split()
-            if str_a == 'dir':
-                name = str_b
-                if name not in current_folder.files:
-                    new_path = current_path / name
-                    new_folder = Folder(new_path, parent=current_folder)
-                    current_folder.files[name] = new_folder
-            else:
-                size, name = int(str_a), str_b
-                if name not in current_folder.files:
-                    current_folder.files[name] = File(name, size, current_folder)
-    return root
+            folder = self._current_folder.files[target_folder_name]
+            assert isinstance(folder, Folder)
+            self._current_folder = folder
+            self._current_path = self._current_path / target_folder_name
+
+    def add_folder(self, name: str) -> None:
+        if name not in self._current_folder.files:
+            new_path = self._current_path / name
+            new_folder = Folder(new_path, parent=self._current_folder)
+            self._current_folder.files[name] = new_folder
+
+    def add_file(self, name: str, size: int) -> None:
+        if name not in self._current_folder.files:
+            self._current_folder.files[name] = File(name, size, self._current_folder)
+
+    def process_line(self, line: str) -> None:
+        match line.split():
+            case ['$', 'cd', target_folder_name]:
+                self.cd(target_folder_name)
+            case ['$', 'ls']:
+                pass
+            case ['dir', name]:
+                self.add_folder(name)
+            case [size_str, name]:
+                size = int(size_str)
+                self.add_file(name, size)
+
+    def make_tree(self) -> Folder:
+        for line in self._lines[1:]:
+            self.process_line(line)
+        return self.root
 
 
-def part_1(data: str):
-    root = make_tree(data)
+def part_1(data: str) -> int:
+    root = Reader(data).make_tree()
     sizes: dict[Path, int] = {}
     root.fill_size(sizes)
     return sum(size for size in sizes.values() if size <= 100_000)
 
 
-def part_2(data: str):
+def part_2(data: str) -> int:
     total = 70_000_000
     need = 30_000_000
-    root = make_tree(data)
+    root = Reader(data).make_tree()
     sizes: dict[Path, int] = {}
     root.fill_size(sizes)
     used = root.size
