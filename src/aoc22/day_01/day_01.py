@@ -5,9 +5,9 @@ from aoc22 import main
 logger = get_logger(__name__)
 
 
-def get_totals(data):
+def get_totals(data: str) -> list[int]:
     elves = []
-    all_calories = []
+    all_calories: list[int] = []
     for line in data.splitlines():
         if not line:
             elves.append(all_calories)
