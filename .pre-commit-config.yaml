@@ -74,5 +74,5 @@ repos:
     hooks:
     - id: mypy
       additional_dependencies: [types-all, pytest]
-      args: ['--strict']
+      args: ['--strict', '--ignore-missing-imports']
       exclude: ^template/
