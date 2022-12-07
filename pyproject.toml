@@ -15,12 +15,3 @@ disable = """
   missing-module-docstring,
   too-few-public-methods,
 """
-
-[tool.mypy]
-exclude = [
-  "template",
-]
-
-[[tool.mypy.overrides]]
-module = "colorama"
-ignore_missing_imports = true
