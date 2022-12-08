@@ -1,3 +1,5 @@
+# mypy: allow-untyped-decorators
+
 import importlib
 
 import typer
@@ -10,7 +12,7 @@ _logger = get_logger(__name__)
 app = typer.Typer()
 
 
-@app.command()  # type: ignore[misc]
+@app.command()
 def run_day(day: int) -> None:
     """Run code for a specific day.
 
