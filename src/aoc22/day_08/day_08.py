@@ -1,42 +1,44 @@
 import numpy as np
+import numpy.typing as npt
 
 from aoc22 import get_logger
 from aoc22 import main
 
 
 _logger = get_logger(__name__)
+TypeForest = npt.NDArray[np.uint8]
 
 
-def read_forest(data: str) -> np.ndarray:
+def read_forest(data: str) -> TypeForest:
     result = np.array([list(line) for line in data.splitlines()]).astype(np.uint8)
     return result
 
 
-def look_left(forest: np.ndarray, row: int, col: int) -> bool:
+def look_left(forest: TypeForest, row: int, col: int) -> bool:
     if col == 0:
         return True
     return bool(np.all(forest[row, :col] < forest[row, col]))
 
 
-def look_right(forest: np.ndarray, row: int, col: int) -> bool:
+def look_right(forest: TypeForest, row: int, col: int) -> bool:
     if col == forest.shape[1] - 1:
         return True
     return bool(np.all(forest[row, col + 1 :] < forest[row, col]))
 
 
-def look_up(forest: np.ndarray, row: int, col: int) -> bool:
+def look_up(forest: TypeForest, row: int, col: int) -> bool:
     if row == 0:
         return True
     return bool(np.all(forest[:row, col] < forest[row, col]))
 
 
-def look_down(forest: np.ndarray, row: int, col: int) -> bool:
+def look_down(forest: TypeForest, row: int, col: int) -> bool:
     if row == forest.shape[0] - 1:
         return True
     return bool(np.all(forest[row + 1 :, col] < forest[row, col]))
 
 
-def scenic_up(forest: np.ndarray, row: int, col: int) -> int:
+def scenic_up(forest: TypeForest, row: int, col: int) -> int:
     result = 0
     rows = range(row)
     for other_row in reversed(rows):
@@ -46,7 +48,7 @@ def scenic_up(forest: np.ndarray, row: int, col: int) -> int:
     return result
 
 
-def scenic_down(forest: np.ndarray, row: int, col: int) -> int:
+def scenic_down(forest: TypeForest, row: int, col: int) -> int:
     result = 0
     rows = range(row + 1, forest.shape[0])
     for other_row in rows:
@@ -56,7 +58,7 @@ def scenic_down(forest: np.ndarray, row: int, col: int) -> int:
     return result
 
 
-def scenic_left(forest: np.ndarray, row: int, col: int) -> int:
+def scenic_left(forest: TypeForest, row: int, col: int) -> int:
     result = 0
     cols = range(col)
     for other_col in reversed(cols):
@@ -66,7 +68,7 @@ def scenic_left(forest: np.ndarray, row: int, col: int) -> int:
     return result
 
 
-def scenic_right(forest: np.ndarray, row: int, col: int) -> int:
+def scenic_right(forest: TypeForest, row: int, col: int) -> int:
     result = 0
     cols = range(col + 1, forest.shape[1])
     for other_col in cols:
