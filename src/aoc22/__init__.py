@@ -2,6 +2,10 @@ import logging
 from pathlib import Path
 from collections.abc import Callable
 
+from colorama import Fore
+from colorama import Style
+import coloredlogs
+
 
 LOGGER_FORMAT = '%(asctime)s - %(filename)s:%(lineno)d - %(levelname)s - %(message)s'
 TypeResult = int | str
@@ -9,11 +13,8 @@ TypeResult = int | str
 
 def get_logger(name: str) -> logging.Logger:
     logger = logging.getLogger(name)
-    formatter = logging.Formatter(LOGGER_FORMAT)
-    handler = logging.StreamHandler()
-    handler.setFormatter(formatter)
-    logger.addHandler(handler)
     logger.setLevel(logging.INFO)
+    coloredlogs.install(logger=logger, fmt=LOGGER_FORMAT)
     return logger
 
 
@@ -36,18 +37,22 @@ def main(
     example = read_input(file_path, 'example.txt')
     data = read_input(file_path, 'input.txt')
 
-    logger.info('PART 1')
+    string = f'{Style.BRIGHT}{Fore.YELLOW}PART 1{Style.RESET_ALL}'
+    logger.info(string)
     example_1 = solve_part_1(example)
-    logger.info('Example 1: %s', example_1)
+    logger.info('Example: %s', f'{Fore.YELLOW}{example_1}')
     answer_1 = solve_part_1(data)
-    logger.info('Answer 1:  %s', answer_1)
+    string = f'{Style.BRIGHT}{Fore.YELLOW}{answer_1}{Style.RESET_ALL}'
+    logger.info('Answer:  %s', string)
 
-    logger.info('############################')
+    logger.info('')
 
-    logger.info('PART 2')
+    string = f'{Style.BRIGHT}{Fore.CYAN}PART 2{Style.RESET_ALL}'
+    logger.info(string)
     example_2 = solve_part_2(example)
-    logger.info('Example 2: %s', example_2)
+    logger.info('Example: %s', f'{Fore.CYAN}{example_2}')
     answer_2 = solve_part_2(data)
-    logger.info('Answer 2:  %s', answer_2)
+    string = f'{Style.BRIGHT}{Fore.CYAN}{answer_2}{Style.RESET_ALL}'
+    logger.info('Answer:  %s', string)
 
     return example_1, answer_1, example_2, answer_2
