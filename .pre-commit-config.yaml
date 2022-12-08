@@ -74,6 +74,6 @@ repos:
     rev: v0.991
     hooks:
     - id: mypy
-      additional_dependencies: [types-all, pytest]
+      additional_dependencies: [numpy, types-all, pytest]
       args: ['--strict', '--ignore-missing-imports']
       exclude: ^template/
