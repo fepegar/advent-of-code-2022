@@ -8,13 +8,13 @@ _logger = get_logger(__name__)
 
 
 class Knot:
-    def __init__(self):
-        self.x = 10
-        self.y = 6
+    def __init__(self) -> None:
+        self.x = 10  # pylint: disable=invalid-name
+        self.y = 6  # pylint: disable=invalid-name
 
 
 class Head(Knot):
-    def move(self, direction):
+    def move(self, direction: str) -> None:
         if direction == 'U':
             self.y += 1
         elif direction == 'D':
@@ -28,18 +28,11 @@ class Head(Knot):
 
 
 class Tail(Knot):
-    def euclidean_distance(self, head: Knot) -> int:
-        return ((self.x - head.x) ** 2 + (self.y - head.y) ** 2) ** 0.5
-
     def manhattan_distance(self, head: Knot) -> int:
         return abs(self.x - head.x) + abs(self.y - head.y)
 
-    def is_adjacent(self, head: Knot) -> bool:
-        return self.euclidean_distance(head) < 2
-
-    def move(self, head: Knot):
+    def move(self, head: Knot) -> tuple[int, int]:
         distance = self.manhattan_distance(head)
-        _logger.debug(f'Distance = {distance:.1f}')
         diff_x = head.x - self.x
         diff_y = head.y - self.y
         if distance < 2:  # adjacent perpendicularly
@@ -69,16 +62,17 @@ class Tail(Knot):
         return self.x, self.y
 
 
-def plot_grid(head: Head, tail: Tail, width: int, height: int):
+def plot_grid(head: Head, tail: Tail, width: int, height: int) -> str:
+    lines = []
     grid = [['.'] * width for _ in range(height)]
     grid[height - tail.y - 1][tail.x] = 'T'
     grid[height - head.y - 1][head.x] = 'H'
     for row in grid:
-        print(''.join(row))
-    print()
+        lines.append(''.join(row))
+    return '\n'.join(lines)
 
 
-def plot_snake(head: Head, tails: list[Tail], width: int, height: int):
+def plot_snake(head: Head, tails: list[Tail], width: int, height: int) -> str:
     lines = []
     grid = [['.'] * width for _ in range(height)]
     for i, tail in enumerate(reversed(tails)):
