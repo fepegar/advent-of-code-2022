@@ -13,8 +13,7 @@ TypeResult = int | str
 
 def get_logger(name: str) -> logging.Logger:
     logger = logging.getLogger(name)
-    logger.setLevel(logging.INFO)
-    coloredlogs.install(logger=logger, fmt=LOGGER_FORMAT)
+    coloredlogs.install(logger=logger, fmt=LOGGER_FORMAT, level=logging.INFO)
     return logger
 
 
