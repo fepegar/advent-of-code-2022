@@ -1,8 +1,6 @@
 from aoc22 import get_logger
 from aoc22 import main
 
-from tqdm.auto import tqdm
-
 
 _logger = get_logger(__name__)
 
@@ -48,8 +46,6 @@ class Tail(Knot):
                 self.y += 1
             elif diff_y < 0:
                 self.y -= 1
-            else:
-                raise ValueError('Should not happen')
         elif diff_x and diff_y:  # move like a bishop towards the head
             if diff_x > 0:
                 self.x += 1
@@ -88,7 +84,7 @@ def part_1(data: str) -> int:
     visited = []
     head = Head()
     tail = Tail()
-    for move in tqdm(data.splitlines()):
+    for move in data.splitlines():
         direction, length = move[0], int(move[1:])
         for _ in range(length):
             # Move H
@@ -103,7 +99,7 @@ def part_2(data: str) -> int:
     head = Head()
     knots = [Tail() for _ in range(9)]
     previous: Head | Tail
-    for move in tqdm(data.splitlines()):
+    for move in data.splitlines():
         direction, length = move[0], int(move[1:])
         for _ in range(length):
             # Move H
