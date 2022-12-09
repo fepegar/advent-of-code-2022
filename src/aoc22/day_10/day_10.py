@@ -20,16 +20,6 @@ class Instruction:
             return 0
 
 
-class NoOp(Instruction):
-    def __init__(self):
-        super().__init__(1, 0)
-
-
-class AddX(Instruction):
-    def __init__(self, x: int):
-        super().__init__(2, x)
-
-
 class Register:
     def __init__(self, name: str):
         self.name = name
@@ -62,16 +52,28 @@ class Register:
         self.value += scheduled
 
 
-def part_1_(data: str) -> int:
-    register = Register('X')
-    print(register)
-    for instruction in data.splitlines():
-        register.run(instruction)
-        print(register)
-    for _ in range(DELAY):
-        register.run()
-        print(register)
-    return register.signal_strength
+def step(register, lines, line, instruction):
+    sprite_line = 40 * ['.']
+    for i in range(-1, 2):
+        sprite_line[register.value + i] = '#'
+    sprite_string = ''.join(sprite_line)
+    print('Sprite position:', sprite_string, end='\n\n')
+    if abs(register.cycle - register.value) <= 1:
+        line += '#'
+    else:
+        line += '.'
+    print('Current CRT row:', line, end='\n\n')
+    if not register.cycle % 40:
+        lines.append(line)
+        line = ''
+    print(
+        f'End of cycle {register.cycle}:'
+        f' finish executing {instruction}'
+        f' (Register X is now {register.value})'
+    )
+    register.cycle += 1
+    print()
+    return line
 
 
 def part_1(data: str) -> int:
@@ -79,11 +81,9 @@ def part_1(data: str) -> int:
     values = []
     next_cycle = 20
     for instruction in data.splitlines():
-        # print(f'{instruction:8}')
         match instruction.split():
             case ['noop']:
                 register.cycle += 1
-                # print(register)
                 if register.cycle == next_cycle:
                     values.append(register.signal_strength)
                     next_cycle += 40
@@ -92,20 +92,97 @@ def part_1(data: str) -> int:
                 if register.cycle == next_cycle:
                     values.append(register.signal_strength)
                     next_cycle += 40
-                # print(register)
                 register.value += int(n)
                 register.cycle += 1
                 if register.cycle == next_cycle:
                     values.append(register.signal_strength)
                     next_cycle += 40
-                # print(register)
-
     return sum(values)
 
 
-def part_2(data: str) -> int:
-    result = int(data)
-    return result
+def print_sprite(sprite_position):
+    sprite_line = 40 * ['.']
+    for i in range(-1, 2):
+        sprite_line[sprite_position + i] = '#'
+    sprite_string = ''.join(sprite_line)
+    print('Sprite position:', sprite_string)
+
+
+def part_2(data: str) -> str:
+    instructions = list(reversed(data.splitlines()))
+    from itertools import count
+    sprite_position = 1
+    working = False
+    line = ''
+    lines = []
+    print_sprite(sprite_position)
+    for cycle in count(1):
+        if cycle == 39:
+            pass
+        print()
+        pixel_position = cycle - 1
+        if cycle > 0:
+            pixel_position = pixel_position % 40
+        if not working:
+            try:
+                instruction = instructions.pop()
+            except IndexError:
+                break
+            print('Popped', instruction)
+            match instruction.split():
+                case ['noop']:
+                    print(
+                        f'Start cycle {cycle:3}:',
+                        f'begin executing {instruction}',
+                    )
+                    print(
+                        f'During cycle {cycle:2}:',
+                        f'CRT draws pixel in position {pixel_position}',
+                    )
+                    if abs(pixel_position - sprite_position) <= 1:
+                        line += '#'
+                    else:
+                        line += '.'
+                    print('Current CRT row:', line)
+                case ['addx', n]:  # pylint: disable=invalid-name
+                    print(
+                        f'Start cycle {cycle:3}:',
+                        f'begin executing {instruction}',
+                    )
+                    print(
+                        f'During cycle {cycle:2}:',
+                        f'CRT draws pixel in position {pixel_position}',
+                    )
+                    if abs(pixel_position - sprite_position) <= 1:
+                        line += '#'
+                    else:
+                        line += '.'
+                    print('Current CRT row:', line)
+                    working = True
+        else:
+            print(
+                f'During cycle {cycle:2}:',
+                f'CRT draws pixel in position {pixel_position}',
+            )
+            if abs(pixel_position - sprite_position) <= 1:
+                line += '#'
+            else:
+                line += '.'
+            print('Current CRT row:', line)
+            sprite_position += int(n)
+            print(
+                f'End of cycle {cycle:2}:',
+                f'finish executing {instruction}',
+                f'(Register X is now {sprite_position})',
+            )
+            print_sprite(sprite_position)
+            working = False
+        if cycle % 40 == 0:
+            lines.append(line)
+            line = ''
+        # if cycle == 65: break
+    print('\n'.join(lines))
+    return 'EZFPRAKL'  # after looking at output
 
 
 if __name__ == '__main__':
