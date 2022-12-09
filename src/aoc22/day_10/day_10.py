@@ -1,11 +1,5 @@
 from itertools import count
 
-from aoc22 import get_logger
-from aoc22 import main
-
-
-_logger = get_logger(__name__)
-
 
 class Register:
     def __init__(self, name: str):
@@ -15,52 +9,9 @@ class Register:
         self.instructions: list[str] = []
         self.schedule: dict[int, int] = {}
 
-    def __repr__(self) -> str:
-        string = (
-            f'Cycle = {self.cycle:3}'
-            f' | {self.name} = {self.value:2}'
-            f' | signal strength = {self.signal_strength:4}'
-        )
-        return string
-
     @property
     def signal_strength(self) -> int:
         return self.value * self.cycle
-
-    def run(self, instruction: str | None = None) -> None:
-        self.cycle += 1
-        if instruction is not None:
-            match instruction.split():
-                case ['noop']:
-                    pass
-                case ['addx', n]:  # pylint: disable=invalid-name
-                    self.schedule[self.cycle + 1] = int(n)
-        scheduled = self.schedule.get(self.cycle, 0)
-        self.value += scheduled
-
-
-def step(register: Register, lines: list[str], line: str, instruction: str) -> str:
-    sprite_line = 40 * ['.']
-    for i in range(-1, 2):
-        sprite_line[register.value + i] = '#'
-    sprite_string = ''.join(sprite_line)
-    print('Sprite position:', sprite_string, end='\n\n')
-    if abs(register.cycle - register.value) <= 1:
-        line += '#'
-    else:
-        line += '.'
-    print('Current CRT row:', line, end='\n\n')
-    if not register.cycle % 40:
-        lines.append(line)
-        line = ''
-    print(
-        f'End of cycle {register.cycle}:'
-        f' finish executing {instruction}'
-        f' (Register X is now {register.value})',
-    )
-    register.cycle += 1
-    print()
-    return line
 
 
 def add_value(register: Register, values: list[int], next_cycle: int) -> int:
@@ -151,7 +102,3 @@ def part_2(data: str) -> str:
             line = ''
     print('\n'.join(lines))
     return 'EZFPRAKL'  # [after looking at output]
-
-
-if __name__ == '__main__':
-    main(__file__, part_1, part_2, _logger)

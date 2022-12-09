@@ -2,7 +2,6 @@ import numpy as np
 import numpy.typing as npt
 
 from aoc22 import get_logger
-from aoc22 import main
 
 
 _logger = get_logger(__name__)
@@ -109,7 +108,3 @@ def part_2(data: str) -> int:
         )
         scores.append(score)
     return max(scores)
-
-
-if __name__ == '__main__':
-    main(__file__, part_1, part_2, _logger)

@@ -1,11 +1,5 @@
 import re
 
-from aoc22 import get_logger
-from aoc22 import main
-
-
-_logger = get_logger(__name__)
-
 
 def get_set(first: str, last: str) -> set[int]:
     return set(range(int(first), int(last) + 1))
@@ -37,7 +31,3 @@ def part_1(data: str) -> int:
 
 def part_2(data: str) -> int:
     return get_intersections_count(data, False)
-
-
-if __name__ == '__main__':
-    main(__file__, part_1, part_2, _logger)
