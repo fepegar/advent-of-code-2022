@@ -3,21 +3,6 @@ from aoc22 import main
 
 
 _logger = get_logger(__name__)
-DELAY = 2
-
-
-class Instruction:
-    def __init__(self, duration: int, x: int):
-        self.duration = duration
-        self.x = x
-        self.cycle = 0
-
-    def run(self):
-        self.cycle += 1
-        if self.cycle == self.duration:
-            return self.x
-        else:
-            return 0
 
 
 class Register:
@@ -28,7 +13,7 @@ class Register:
         self.instructions: list[str] = []
         self.schedule: dict[int, int] = {}
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         string = (
             f'Cycle = {self.cycle:3}'
             f' | {self.name} = {self.value:2}'
@@ -37,7 +22,7 @@ class Register:
         return string
 
     @property
-    def signal_strength(self):
+    def signal_strength(self) -> int:
         return self.value * self.cycle
 
     def run(self, instruction: str | None = None) -> None:
@@ -52,7 +37,7 @@ class Register:
         self.value += scheduled
 
 
-def step(register, lines, line, instruction):
+def step(register: Register, lines: list[str], line: str, instruction: str) -> str:
     sprite_line = 40 * ['.']
     for i in range(-1, 2):
         sprite_line[register.value + i] = '#'
@@ -69,7 +54,7 @@ def step(register, lines, line, instruction):
     print(
         f'End of cycle {register.cycle}:'
         f' finish executing {instruction}'
-        f' (Register X is now {register.value})'
+        f' (Register X is now {register.value})',
     )
     register.cycle += 1
     print()
@@ -100,7 +85,7 @@ def part_1(data: str) -> int:
     return sum(values)
 
 
-def print_sprite(sprite_position):
+def print_sprite(sprite_position: int) -> None:
     sprite_line = 40 * ['.']
     for i in range(-1, 2):
         sprite_line[sprite_position + i] = '#'
@@ -111,6 +96,7 @@ def print_sprite(sprite_position):
 def part_2(data: str) -> str:
     instructions = list(reversed(data.splitlines()))
     from itertools import count
+
     sprite_position = 1
     working = False
     line = ''
