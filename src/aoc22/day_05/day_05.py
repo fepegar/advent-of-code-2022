@@ -1,11 +1,7 @@
 from collections import defaultdict
 import re
 
-from aoc22 import get_logger
-from aoc22 import main
 
-
-_logger = get_logger(__name__)
 TypeStacks = dict[int, list[str]]
 
 
@@ -54,7 +50,3 @@ def part_1(data: str) -> str:
 def part_2(data: str) -> str:
     crane = Crane(data)
     return crane.run(model=9001)
-
-
-if __name__ == '__main__':
-    main(__file__, part_1, part_2, _logger)

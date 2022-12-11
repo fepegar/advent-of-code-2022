@@ -4,7 +4,6 @@ import abc
 import enum
 
 from aoc22 import get_logger
-from aoc22 import main
 
 
 logger = get_logger(__name__)
@@ -145,7 +144,3 @@ def part_2(data: str) -> int:
     games = data.splitlines()
     score = sum(play_game_real(game) for game in games)
     return score
-
-
-if __name__ == '__main__':
-    main(__file__, part_1, part_2, logger)

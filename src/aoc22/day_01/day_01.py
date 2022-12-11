@@ -1,5 +1,4 @@
 from aoc22 import get_logger
-from aoc22 import main
 
 
 logger = get_logger(__name__)
@@ -29,7 +28,3 @@ def part_2(data: str) -> int:
     totals = get_totals(data)
     top = totals[-3:]
     return sum(top)
-
-
-if __name__ == '__main__':
-    main(__file__, part_1, part_2, logger)

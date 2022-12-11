@@ -2,12 +2,6 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from aoc22 import get_logger
-from aoc22 import main
-
-
-_logger = get_logger(__name__)
-
 
 class File:
     def __init__(self, path: str | Path, size: int, parent: Folder | None = None):
@@ -128,7 +122,3 @@ def part_2(data: str) -> int:
         if would_have >= need:
             candidates.append(size)
     return min(candidates)
-
-
-if __name__ == '__main__':
-    main(__file__, part_1, part_2, _logger)
