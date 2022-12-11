@@ -1,4 +1,5 @@
 import logging
+import os
 from pathlib import Path
 from collections.abc import Callable
 
@@ -11,9 +12,12 @@ LOGGER_FORMAT = '%(asctime)s - %(filename)s:%(lineno)d - %(levelname)s - %(messa
 TypeResult = int | str | None
 
 
-def get_logger(name: str) -> logging.Logger:
+def get_logger(name: str, level: int = logging.INFO) -> logging.Logger:
     logger = logging.getLogger(name)
-    coloredlogs.install(logger=logger, fmt=LOGGER_FORMAT, level=logging.INFO)
+    level_string = os.environ.get('AOC_LOGLEVEL')
+    if level_string is not None:
+        level = getattr(logging, level_string)
+    coloredlogs.install(logger=logger, fmt=LOGGER_FORMAT, level=level)
     return logger
 
 

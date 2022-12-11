@@ -8,7 +8,6 @@ from aoc22 import main
 from aoc22 import get_logger
 
 
-_logger = get_logger(__name__)
 app = typer.Typer()
 
 
@@ -42,6 +41,8 @@ def run_day(
 
     solve_part_1 = None if two_only else day_module.part_1
     solve_part_2 = None if one_only else day_module.part_2
+
+    _logger = get_logger(__name__)
 
     main(
         day_path,
