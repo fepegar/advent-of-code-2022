@@ -11,9 +11,9 @@ _logger = get_logger(__name__)
 
 class Monkey:
     def __init__(self, lines: list[str]):
+        self.items: list[int]
         self.process_lines(lines)
         self.num_inspected = 0
-        self.items: list[int] = []
 
     def process_lines(self, lines: list[str]) -> None:
         self.index = int(lines[0][-2])
@@ -37,10 +37,10 @@ class Monkey:
         )
         return '\n'.join(lines)
 
-    def process_items(self, all_monkeys: list[Monkey], *, modulo: int) -> None:
+    def process_items(self, all_monkeys: list[Monkey], *, modulo: int | None) -> None:
         for old in self.items:  # pylint: disable=unused-variable  # noqa: B007
             new: int = eval(self.operation)  # pylint: disable=eval-used
-            if modulo:
+            if modulo is not None:
                 new %= modulo
             else:
                 new //= 3
@@ -66,14 +66,13 @@ def read_monkeys(data: str) -> list[Monkey]:
     return monkeys
 
 
-def process_monkeys(data: str, *, num_rounds: int, divide: bool = True) -> int:
+def process_monkeys(data: str, *, num_rounds: int, divide: bool) -> int:
     monkeys = read_monkeys(data)
     # Idea below shamefully stolen from
     # https://github.com/radosz99/aocd/blob/main/solutions/11.py
-    modulo = prod(monkey.test_divisible for monkey in monkeys)
-    from tqdm.auto import trange
+    modulo = None if divide else prod(monkey.test_divisible for monkey in monkeys)
 
-    for round_idx in trange(1, num_rounds + 1):
+    for round_idx in range(1, num_rounds + 1):
         for monkey in monkeys:
             monkey.process_items(monkeys, modulo=modulo)
         if num_rounds == 20:
