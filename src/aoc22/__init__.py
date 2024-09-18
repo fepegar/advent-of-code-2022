@@ -34,6 +34,7 @@ def main(
     solve_part_2: None | Callable[[str], TypeResult],
     logger: logging.Logger,
     examples_only: bool = False,
+    skip_examples: bool = False,
 ) -> tuple[TypeResult, TypeResult, TypeResult, TypeResult]:
     example = read_input(file_path, 'example.txt')
     data = read_input(file_path, 'input.txt')
@@ -43,8 +44,9 @@ def main(
     if solve_part_1 is not None:
         string = f'{Style.BRIGHT}{Fore.YELLOW}PART 1{Style.RESET_ALL}'
         logger.info(string)
-        example_1 = solve_part_1(example)
-        logger.info('Example: %s', f'{Fore.YELLOW}{example_1}')
+        if not skip_examples:
+            example_1 = solve_part_1(example)
+            logger.info('Example: %s', f'{Fore.YELLOW}{example_1}')
         if not examples_only:
             answer_1 = solve_part_1(data)
             string = f'{Style.BRIGHT}{Fore.YELLOW}{answer_1}{Style.RESET_ALL}'
@@ -56,8 +58,9 @@ def main(
     if solve_part_2 is not None:
         string = f'{Style.BRIGHT}{Fore.CYAN}PART 2{Style.RESET_ALL}'
         logger.info(string)
-        example_2 = solve_part_2(example)
-        logger.info('Example: %s', f'{Fore.CYAN}{example_2}')
+        if not skip_examples:
+            example_2 = solve_part_2(example)
+            logger.info('Example: %s', f'{Fore.CYAN}{example_2}')
         if not examples_only:
             answer_2 = solve_part_2(data)
             string = f'{Style.BRIGHT}{Fore.CYAN}{answer_2}{Style.RESET_ALL}'

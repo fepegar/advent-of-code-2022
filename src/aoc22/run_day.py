@@ -32,6 +32,11 @@ def run_day(
         '-2',
         help='Run part 2 only.',
     ),
+    skip_examples: bool = typer.Option(  # noqa: B008
+        False,
+        '-s',
+        help='Skip examples.',
+    ),
 ) -> None:
     """Run code for a specific day."""
     day_module_name = f'day_{day:02d}'
@@ -50,4 +55,5 @@ def run_day(
         solve_part_2,
         _logger,
         examples_only=examples_only,
+        skip_examples=skip_examples,
     )
